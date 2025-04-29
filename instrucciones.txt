@@ -1,0 +1,513 @@
+--------------------4.5 Actividad práctica Manejo de Archivos mediante Servidor con Express-------------------------
+
+###ProductManager.js 
+
+1- crear clase product manager que se encarga de gestionar los productos almacenados en un archivo JSON,
+Sus métodos permiten agregar, leer y buscar productos.
+
+class ProductManager {
+    constructor(path) {
+        this.path = path; // Ruta del archivo donde se almacenarán los productos
+    }
+}
+
+2- creo metodo readProducts que Lee el archivo JSON y devuelve su contenido como un arreglo de productos.
+,Este método se utiliza internamente para cargar los datos antes de procesarlos.
+
+readProducts() {
+        try {
+            if (fs.existsSync(this.path)) {
+                const data = fs.readFileSync(this.path, 'utf-8'); // Usa fs.readFileSync correctamente
+                return JSON.parse(data); // Convertir los datos a JSON
+            }
+            return []; // Si el archivo no existe, devolver un arreglo vacío
+        } catch (error) {
+            console.error('Error al leer el archivo:', error);
+            return []; // Si ocurre un error, devolver un arreglo vacío
+        }
+    }
+
+3- creo metodo saveProducts que Guarda un arreglo de productos en el archivo JSON.
+Se utiliza internamente para actualizar el archivo cada vez que se agrega o modifica un producto.
+
+saveProducts(products) {
+    fs.writeFileSync(this.path, JSON.stringify(products, null, 2), 'utf-8'); // Guarda los datos en el archivo
+}
+
+3- creo metodo getProducts que 
+    getProducts() {
+        return this.readProducts();
+    }
+
+4- creo metodo addProduct que  Recibe un objeto con los datos de un producto,
+le asigna un ID único y lo guarda en el archivo.
+
+addProduct(product) {
+        const products = this.readProducts();
+        const newProduct = {
+            id: products.length > 0 ? products[products.length - 1].id + 1 : 1,
+            ...product
+        };
+        products.push(newProduct);
+        this.saveProducts(products);
+        return newProduct;
+    }
+
+5- creo metodo getProducts que Devuelve un arreglo con todos los productos almacenados 
+en el archivo.
+
+    getProducts() {
+        return this.readProducts();
+    }
+
+6- creo metodo getProductById que Busca un producto por su ID y lo devuelve. 
+Si no existe, lanza un error.
+
+    getProductById(id) {
+        const products = this.readProducts();
+        const product = products.find(p => p.id === id);
+        if (!product) {
+            throw new Error(`Product with id ${id} not found.`);
+        }
+        return product;
+    }
+
+###app.js---> Este archivo es una aplicación Express que utiliza la clase `ProductManager`
+para exponer endpoints API.
+
+1- Configura el servidor Express y crea una instancia de `ProductManager`
+con la ruta del archivo `products.json`:
+
+const express = require('express');
+const ProductManager = require('./ProductManager');
+
+const app = express();
+const port = 3000;
+
+const productManager = new ProductManager('./products.json');
+
+// Middleware para analizar JSON
+app.use(express.json());
+
+2- Devuelve todos los productos almacenados con get
+
+app.get('/products', (req, res) => {
+    try {
+        const products = productManager.getProducts();
+        res.json({ products });
+    } catch (err) {
+        res.status(500).json({ error: 'Error al obtener los productos.' });
+    }
+});
+
+- **Respuesta**:
+  ```json
+  {
+      "products": []
+  }
+
+3- Devuelve un producto específico por su ID con get 
+
+app.get('/products/:pid', (req, res) => {
+    try {
+        const pid = parseInt(req.params.pid, 10); // Convierte el ID a un número
+        const product = productManager.getProductById(pid);
+        res.json({ product });
+    } catch (err) {
+        res.status(404).json({ error: err.message });
+    }
+});
+
+- **Respuesta (si existe)**:
+  ```json
+  {
+      "product": {
+          "id": 1,
+          "title": "Hat",
+          "description": "A nice hat",
+          "price": 20,
+          "thumbnail": "hat.jpg",
+          "code": "HAT001",
+          "stock": 15
+      }
+  }
+  ```
+- **Respuesta (si no existe)**: json:
+
+  {
+      "error": "Product with id 1 not found."
+  }
+
+4- Recibe un producto en formato JSON, lo agrega al archivo `products.json` 
+y devuelve el producto recién creado:
+
+app.post('/products', (req, res) => {
+    try {
+        const newProduct = productManager.addProduct(req.body); // Agrega un nuevo producto
+        res.status(201).json(newProduct); // Devuelve el producto agregado
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+- **Ejemplo de solicitud**:
+  ```json
+  {
+      "title": "Shoes",
+      "description": "A pair of shoes",
+      "price": 50,
+      "thumbnail": "shoes.jpg",
+      "code": "SH001",
+      "stock": 10
+  }
+
+-----------------------------Prueba de endpoints--------------------------------------
+
+0.Crea el archivo products.json: Antes de iniciar, crea un archivo vacío llamado products.json 
+en el mismo directorio que los archivos ProductManager.js y app.js (aca se va a guardar cada producto que cree con el POST)
+
+1. GET /products: Devuelve todos los productos almacenados.
+
+devuelve []
+porque no almacene ningun producto
+
+GET /products/:pid: Reemplaza :pid con un ID (por ejemplo, 1) para obtener un producto específico.
+
+devuelve porque no hay productos con el ID especificado
+{
+    "error": "Product with id NaN not found."
+}
+
+3.si intento agregar un producto con un POST   (no esta en el enunciado pero para probar )
+
+app.post('/products', (req, res) => {
+    try {
+        const newProduct = productManager.addProduct(req.body);
+        res.status(201).json(newProduct);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+voy al postman, creo un producto nuevo con el metodo post->body->raw (escribo productos en formato JSON)
+
+muestra cada producto nuevo , cada uno con su id -->creo 2 productos
+
+Hago get y devuelve el arreglo con los 2 productos creados recien y se estan guardando en el products.json
+
+si hago un get con la ruta localhost:3000/products/2 ---> devuelve el producto con el id:2
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+ENTREGA N°1 
+
+1- cambiar el puerto a 8080 y crear archivos de rutas 
+2-organizar estructura del proyecto:
+
+src/
+  routes/               <-- Carpeta para los routers de Express
+    products.router.js  <-- Archivo para las rutas de productos
+    carts.router.js     <-- Archivo para las rutas de carritos
+  app.js                <-- Punto de entrada del servidor
+
+src/routes/products.router.js--------> define todas las rutas relacionadas con productos, como listar productos, agregar nuevos, etc.
+src/routes/carts.router.js-----------> define todas las rutas relacionadas con carritos, como crear carritos, listar productos en un carrito, etc.
+src/app.js---------------------------> archivo principal del servidor donde se inicializa Express y se usan los routers.
+
+3- crear router para productos
+
+Importar express para poder usar express.Router().
+Crear una instancia de router con express.Router().
+Definir rutas específicas, como GET / para listar productos y GET /:pid para obtener un producto por ID.
+Exportar el router para que pueda ser utilizado en el archivo principal (app.js).
+
+4- Crear un router para carritos
+En el archivo carts.router.js, repetí un procedimiento similar, pero ahora con las rutas relacionadas con los carritos.
+
+Importar express para usar express.Router().
+Crear una instancia de router.
+Definir rutas específicas, como POST / para crear un carrito y GET /:cid para obtener un carrito por ID.
+Exportar el router.
+
+
+5-Configurar los routers en app.js
+
+En el archivo principal (app.js)
+
+Importar express para iniciar el servidor.
+Importar los routers (products.router.js y carts.router.js).
+Usar el middleware express.json() para parsear cuerpos JSON.
+Vincular los routers a las rutas principales /api/products y /api/carts.
+
+
+
+-----------------------------------------------------------------------------------------------------
+
+
+
+6- Crear rutas para Manejo de Productos (/api/products/)
+
+GET /:     <3     url---> http://localhost:8080/api/products 
+Debe listar todos los productos de la base de datos.
+###
+// Ruta para obtener todos los productos
+router.get('/', (req, res) => {
+    try {
+        const products = productManager.getProducts();
+        res.json({ products });
+    } catch (error) {
+        res.status(500).json({ error: 'Error al obtener los productos.' });
+    }
+});
+###
+
+
+GET /:pid:   <3   url------>  http://localhost:8080/api/products/3
+Debe traer solo el producto con el id proporcionado.
+###
+// Ruta para obtener un producto por su ID
+router.get('/:pid', (req, res) => {
+    try {
+        const pid = parseInt(req.params.pid, 10); // Convertir el ID a número
+        const product = productManager.getProductById(pid); // Buscar el producto
+        res.json({ product });
+    } catch (error) {
+        res.status(404).json({ error: error.message });
+    }
+});
+###
+
+
+
+POST /:    <3      url--------> http://localhost:8080/api/products 
+Debe agregar un nuevo producto con los siguientes campos:
+id: Number/String (No se manda desde el body, se autogenera para asegurar que nunca se repitan los ids).
+
+title: String
+
+description: String
+
+code: String
+
+price: Number
+
+status: Boolean
+
+stock: Number
+
+category: String
+
+thumbnails: Array de Strings (rutas donde están almacenadas las imágenes del producto).
+
+--------> pruebo en postam,  con POST y ruta: http://localhost:8080/api/products  ,toco body y raw para el formatoJSON y escribo:{
+  "title": "Producto de prueba",
+  "description": "Descripción del producto de prueba",
+  "code": "PRD01",
+  "price": 100.50,
+  "status": true,
+  "stock": 20,
+  "category": "Categoría de prueba",
+  "thumbnails": [
+    "ruta/imagen1.jpg",
+    "ruta/imagen2.jpg"
+  ]
+}
+
+
+PUT /:pid:  <3       url-----> http://localhost:8080/api/products/1 
+Debe actualizar un producto por los campos enviados desde el body. No se debe actualizar ni eliminar el idal momento de hacer la actualización.
+toco body--> raw---> escribo: {
+  "title": "Producto actualizado",
+  "description": "Descripción actualizada del producto",
+  "price": 150.75,
+  "status": false,
+  "stock": 10,
+  "category": "Nueva categoría",
+  "thumbnails": [
+    "ruta/nueva-imagen1.jpg",
+    "ruta/nueva-imagen2.jpg"
+  ]
+}
+
+DELETE /:pid:   <3     url ----->  http://localhost:8080/api/products/1
+Debe eliminar el producto con el pid indicado.
+
+GET/     <3     url------------> localhost:8080/api/products
+Debería listar todos los productos.
+
+GET/:pid:     <3     url--------->  http://localhost:8080/api/products/2
+Debería devolver un producto por su ID
+
+
+POST /api/products  <3      -----> http://localhost:8080/api/products
+Debería agregar un nuevo producto.  
+
+PUT /api/products/:pid:   <3     url -----> http://localhost:8080/api/products/6
+ Debería actualizar un producto existente. 
+ si sirve cambie el producto con el id 6 y lo cambio, toco put pongo la url body->raw-> escribir productos que quiera eliminar
+
+DELETE /api/products/:pid:   <3    url -----> http://localhost:8080/api/products/6
+ Debería eliminar un producto por su ID.  ---> si sirve borre el producto 6 
+
+
+
+
+
+--------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+7. crear Rutas para Manejo de Carritos (/api/carts/)
+
+POST /:  <3  ---> url  http://localhost:8080/api/carts
+Debe crear un nuevo carrito con la siguiente estructura:
+id: Number/String (Autogenerado para asegurar que nunca se dupliquen los ids).
+
+products: Array que contendrá objetos que representen cada producto.
+
+----------> si lo crea pongo el post y url :
+ y devuelve : {
+    "id": 1,
+    "products": []
+}
+y se guardaron el carts.json
+
+
+GET /:cid:   <3
+Debe listar los productos que pertenecen al carrito con el cid proporcionado.   url:http://localhost:8080/api/carts/1
+si sirve 
+
+
+POST /:cid/product/:pid:   <3    ------->url: http://localhost:8080/api/carts/1/product/101 
+Debe agregar el producto al arreglo products del carrito seleccionado, utilizando el siguiente formato:
+product: Solo debe contener el ID del producto.
+
+quantity: Debe contener el número de ejemplares de dicho producto (se agregará de uno en uno).
+
+
+Si un producto ya existente intenta agregarse, se debe incrementar el campo quantity de dicho producto.
+
+bien me imprime: 
+{
+    "id": 1,
+    "products": [
+        {
+            "product": 101,
+            "quantity": 1
+        }
+    ]
+}
+
+Si vuelvo a enviar la misma solicitud, la cantidad del producto debería incrementarse:
+devuelve 
+{
+    "id": 1,
+    "products": [
+        {
+            "product": 101,
+            "quantity": 2
+        }
+    ]
+}
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------
+mi estructura de archivos se tiene que ver asi: 
+
+/product-manager
+   /node_modules
+   /src
+       app.js
+       /data
+            carts.json
+            products.json
+        /managers
+            CartManager.js
+            ProductManager.js
+        /routers
+            carts.router.js
+            products.router.js
+    instrucciones.txt
+    package-look.json 
+    package.json
+        
+
+
+
+
+ENTREGA N°2
+
+1- cambiar todos los archivos para usar import
+2- instalar handlebars y importarlo en el app.js, crear estructura y get que de el title
+3-creo carpeta views para menejar los handlebars, con dentro el home.handlebars y la carpeta layouts con dentro el main.handlebars
+4- En el archivo products.router.js, crea una ruta para renderizar la vista con los productos.
+
+
+
+/entrega-1-backend-new
+   /node_modules
+   /src
+       app.js              # Configuración principal del servidor
+       utils.js            # Funciones auxiliares (opcional)
+       /data
+            carts.json     # Archivo JSON con datos de carritos
+            products.json  # Archivo JSON con datos de productos
+       /public
+            client.js
+       /managers
+            CartManager.js     # Clase para gestionar carritos
+            ProductManager.js  # Clase para gestionar productos
+       /routers
+            carts.router.js    # Rutas relacionadas con carritos
+            products.router.js # Rutas relacionadas con productos
+       /views
+            products.handlebars  # Página principal (antes era home.handlebars)
+            /layouts
+                main.handlebars  # Layout principal (estructura HTML base)
+    instrucciones.txt
+    package-lock.json
+    package.json
+
+
+
+    <h1>Lista de Productos</h1>
+<ul>
+    {{#each products}}
+        <li>
+            <h2>{{this.name}}</h2>
+            <p>Precio: ${{this.price}}</p>
+            <p>{{this.description}}</p>
+        </li>
+    {{/each}}
+</ul>

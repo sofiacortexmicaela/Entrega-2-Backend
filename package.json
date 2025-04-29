@@ -1,0 +1,20 @@
+{
+  "name": "product-manager",
+  "version": "1.0.0",
+  "main": "product-manager.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon product-manager/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-handlebars": "^8.0.2",
+    "method-override": "^3.0.0",
+    "socket.io": "^4.8.1"
+  }
+}

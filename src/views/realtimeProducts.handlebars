@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        // Escuchar lista de productos
+        socket.on('productList', (products) => {
+            const productList = document.getElementById('product-list');
+            productList.innerHTML = '';
+            products.forEach((product) => {
+                const li = document.createElement('li');
+                li.textContent = `${product.title} - $${product.price}`;
+                productList.appendChild(li);
+            });
+        });
+
+        // Agregar un producto
+        function addProduct(event) {
+            event.preventDefault();
+            const form = event.target;
+            const product = {
+                title: form.title.value,
+                description: form.description.value,
+                code: form.code.value,
+                price: Number(form.price.value),
+                stock: Number(form.stock.value),
+                category: form.category.value,
+            };
+            socket.emit('addProduct', product);
+            form.reset();
+        }
+    </script>
+</head>
+<body>
+    <h1>{{title}}</h1>
+    <form onsubmit="addProduct(event)">
+        <input type="text" name="title" placeholder="Título" required>
+        <input type="text" name="description" placeholder="Descripción" required>
+        <input type="text" name="code" placeholder="Código" required>
+        <input type="number" name="price" placeholder="Precio" required>
+        <input type="number" name="stock" placeholder="Stock" required>
+        <input type="text" name="category" placeholder="Categoría" required>
+        <button type="submit">Agregar Producto</button>
+    </form>
+    <ul id="product-list"></ul>
+</body>
+</html>
