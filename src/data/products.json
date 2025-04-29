@@ -7,5 +7,14 @@
     "price": 200,
     "stock": 23,
     "category": "tecnologia"
+  },
+  {
+    "id": 2,
+    "title": "so",
+    "description": "d",
+    "code": "e",
+    "price": 56,
+    "stock": 7,
+    "category": "h"
   }
 ]
