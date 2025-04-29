@@ -1,33 +1,11 @@
 [
   {
     "id": 1,
-    "title": "Nuevo Producto1",
-    "description": "Descripción del producto",
-    "code": "PRD01",
-    "price": 100.5,
-    "status": true,
-    "stock": 20,
-    "category": "Categoría de prueba",
-    "thumbnails": []
-  },
-  {
-    "id": 2,
-    "title": "Nuevo Producto2",
-    "description": "Descripción del producto",
-    "code": "PRD01",
-    "price": 100.5,
-    "status": true,
-    "stock": 20,
-    "category": "Categoría de prueba",
-    "thumbnails": []
-  },
-  {
-    "id": 3,
     "title": "laptop",
     "description": "mac",
-    "code": "223",
-    "price": 800,
-    "stock": 50,
+    "code": "23",
+    "price": 200,
+    "stock": 23,
     "category": "tecnologia"
   }
 ]

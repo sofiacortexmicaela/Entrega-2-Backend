@@ -475,39 +475,28 @@ ENTREGA N°2
 
 
 
-/entrega-1-backend-new
-   /node_modules
+/Entrega-2-backend
    /src
-       app.js              # Configuración principal del servidor
-       utils.js            # Funciones auxiliares (opcional)
+       app.js                             # Configuración principal del servidor
+       utils.js                           # Funciones auxiliares (opcional)
        /data
-            carts.json     # Archivo JSON con datos de carritos
-            products.json  # Archivo JSON con datos de productos
-       /public
+            carts.json                    # Archivo JSON con datos de carritos
+            products.json                 # Archivo JSON con datos de productos
+       /public 
             client.js
+            index.HTML
+            /css
+               styless.css                # Añadir estilos a la web
        /managers
-            CartManager.js     # Clase para gestionar carritos
-            ProductManager.js  # Clase para gestionar productos
+            CartManager.js                # Clase para gestionar carritos
+            ProductManager.js             # Clase para gestionar productos
        /routers
-            carts.router.js    # Rutas relacionadas con carritos
-            products.router.js # Rutas relacionadas con productos
+            carts.router.js               # Rutas relacionadas con carritos
+            products.router.js            # Rutas relacionadas con productos
        /views
-            products.handlebars  # Página principal (antes era home.handlebars)
+            products.handlebars           #paginas principales
+            realtimeProducts.handlebars              
             /layouts
-                main.handlebars  # Layout principal (estructura HTML base)
-    instrucciones.txt
-    package-lock.json
-    package.json
-
-
-
-    <h1>Lista de Productos</h1>
-<ul>
-    {{#each products}}
-        <li>
-            <h2>{{this.name}}</h2>
-            <p>Precio: ${{this.price}}</p>
-            <p>{{this.description}}</p>
-        </li>
-    {{/each}}
-</ul>
+                main.handlebars           # estructura HTML base
+    package-lock.json                     # Archivos de dependencias
+    package.json 

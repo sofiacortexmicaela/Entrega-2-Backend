@@ -15,7 +15,10 @@
             productList.innerHTML = '';
             products.forEach((product) => {
                 const li = document.createElement('li');
-                li.textContent = `${product.title} - $${product.price}`;
+                li.innerHTML = `
+                    ${product.title} - $${product.price}
+                    <button onclick="deleteProduct('${product.id}')">Eliminar</button>
+                `;
                 productList.appendChild(li);
             });
         });
@@ -34,6 +37,12 @@
             };
             socket.emit('addProduct', product);
             form.reset();
+        }
+
+        // Eliminar un producto
+        function deleteProduct(productId) {
+           console.log(`Eliminando producto con ID: ${productId}`);
+           socket.emit('deleteProduct', productId); // Enviar el ID al servidor
         }
     </script>
 </head>

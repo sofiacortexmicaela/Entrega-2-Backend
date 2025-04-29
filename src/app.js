@@ -42,18 +42,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
 
-// Ruta para la vista home 
-app.get('/home', async (req, res) => {
+// Ruta para la vista products
+app.get('/products', async (req, res) => {
     const productManager = new ProductManager(path.join(__dirname, 'data', 'products.json'));
-    const products = await productManager.getProducts();
-    res.render('products', { products, title: 'Lista de Productos' });
+    const products = await productManager.getProducts(); // Obtener productos desde el archivo
+    res.render('products', { products, title: 'Lista de Productos' }); // Renderizar la vista
 });
 
 // Ruta para vista realTimeProducts
 app.get('/realTimeProducts', async (req, res) => {
     const productManager = new ProductManager(path.join(__dirname, 'data', 'products.json'));
-    const products = await productManager.getProducts();
-    res.render('realtimeProducts', { products, title: 'Productos en Tiempo Real' });
+    const products = await productManager.getProducts(); // Asegúrate de obtener los productos correctamente
+    res.render('realtimeProducts', { products, title: 'Productos en Tiempo Real' }); // Pasar productos a la vista
 });
 
 // Socket.IO configuración
@@ -76,17 +76,17 @@ io.on('connection', (socket) => {
             console.error('Error al agregar producto:', error);
         }
     });
-
     // Escuchar eliminación de productos
     socket.on('deleteProduct', async (productId) => {
         try {
+            console.log(`Intentando eliminar producto con ID: ${productId}`);
             await productManager.deleteProduct(productId); // Eliminar producto
             const products = await productManager.getProducts();
             io.emit('productList', products); // Actualizar la lista para todos los clientes
         } catch (error) {
-            console.error('Error al eliminar producto:', error);
+            console.error('Error al eliminar producto:', error.message);
         }
-    });
+    })
 });
 
 // Iniciar el servidor
