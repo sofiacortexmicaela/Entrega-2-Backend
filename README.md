@@ -22,31 +22,4 @@ Si se desea hacer la conexión de socket emits con HTTP, deberás buscar la form
 
 
 estudiante: Sofía Micaela Cortez
-
-estructura del proyecto: 
-
-/Entrega-2-backend
-   /src
-       app.js                             # Configuración principal del servidor
-       utils.js                           # Funciones auxiliares (opcional)
-       /data
-            carts.json                    # Archivo JSON con datos de carritos
-            products.json                 # Archivo JSON con datos de productos
-       /public 
-            client.js
-            index.HTML
-            /css
-               styless.css                # Añadir estilos a la web
-       /managers
-            CartManager.js                # Clase para gestionar carritos
-            ProductManager.js             # Clase para gestionar productos
-       /routers
-            carts.router.js               # Rutas relacionadas con carritos
-            products.router.js            # Rutas relacionadas con productos
-       /views
-            products.handlebars           #paginas principales
-            realtimeProducts.handlebars              
-            /layouts
-                main.handlebars           # estructura HTML base
-    package-lock.json                     # Archivos de dependencias
-    package.json                              
+                             
