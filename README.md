@@ -1,6 +1,6 @@
 Entrega Final Curso Desarrollo Backend Avanzado
 
-/Entrega Final Backend ------> Estructura del proyecto
+(/Entrega Final Backend ------> Estructura del proyecto
    /src
        /data
             carts.json                    # Archivo JSON con datos de carritos
@@ -32,7 +32,7 @@ Entrega Final Curso Desarrollo Backend Avanzado
     .env
 .gitignore
 package.json 
-package-lock.json                          # Archivos de dependencias
+package-lock.json                          # Archivos de dependencias  )
 
 
 -----------------------------Pruebas con POSTMAN para Productos----------------------------------
@@ -65,7 +65,38 @@ Ejemplo 4: Con page      <3
 URL GET: http://localhost:8080/api/products?page=2
 Resultado esperado: Muestra los productos en la segunda página.
 
-------------------------------------------------------------------------------------------------
+-----------------------------Pruebas con POSTMAN para Carritos----------------------------------
 
+Ejemplo 0:  Crear un carrito <3
+URL POST: http://localhost:8080/api/carts       --> tocar body --> none
+Resultado esperado: Muestra el carrito creado con su ID
+
+Ejemplo 1: Agregar un producto al carrito <3
+URL POST: http://localhost:8080/api/carts/<cid>/products/<pid>    
+         CAMBIAR <sid> por el id del carrito y <pid> con el id del producto que quiera agregar al carrito
+         AGREGAR un {"quantity": 2} <----- en el ---> body --> raw   
+         que es la cant de ese producto que quiero agregar al producto
+Resultado esperado: Muestra mensaje de pruducto agregado al carrito correctamente
+
+Ejemplo 2: Buscar un carrito con los productos poblados   <3
+URL GET:  http://localhost:8080/api/carts/<sid>     ---> CAMBIAR <sid> con el ID del carrito
+Resultado esperado: Muestra el carrito y en donde va el array de products = []    muestra los datos de los productos que estan dentro de ese carrito, esto gracias al populate.
+
+Ejemplo 3: Eliminar un producto del carrito   <3
+URL DELETE:   http://localhost:8080/api/carts/<cid>/products/<pid>    
+         CAMBIAR <sid> por el id del carrito y <pid> con el id del producto que quiera eliminar
+Resultado esperado: Muestra un mensaje de producto eliminado correctamente y como queda el carrito sin el producto eliminado
+
+Ejemplo 4: Actualizar el quiantity (cantidad de ese producto que hay en el carrito) <3
+URL PUT:   http://localhost:8080/api/carts/<cid>/products/<pid>
+           CAMBIAR <sid> por el id del carrito y <pid> con el id del producto que le quiera actualizar la cantidad 
+           AGREGAR un {"quantity": 5} <----- la cantidad que quiero actualizar 
+Resultado esperado: Actualiza el quantity y muestra el carrito entero
+
+Ejemplo 5: Vaciar el carrito <3
+URL DELETE:   http://localhost:8080/api/carts/<cid>
+Resultado esperado: Muestra mensaje de que se vacio correctamente y muestra como quedo el carrito
+
+------------------------------------------------------------------------------------------------
 estudiante: Sofía Micaela Cortez
                              
