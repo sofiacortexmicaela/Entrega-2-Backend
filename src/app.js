@@ -1,13 +1,20 @@
 import express from 'express';
 import productsRouter from './routers/products.router.js';
 import cartsRouter from './routers/carts.router.js';
+import viewsRouter from './routers/views.router.js';
 import { engine } from 'express-handlebars';
 import __dirname from './utils.js';
 import path from 'path';
 import http from 'http';
 import { Server } from 'socket.io';
 import ProductManager from './managers/ProductManager.js';
-import methodOverride from 'method-override'; // 
+import methodOverride from 'method-override'; 
+import mongoose from "mongoose";
+import dotenv from 'dotenv';
+dotenv.config();
+
+// Verificar si MONGO_URI se está cargando correctamente
+console.log("MONGO_URI desde .env:", process.env.MONGO_URI)
 
 // servidor
 const app = express(); 
@@ -22,6 +29,9 @@ app.use(express.urlencoded({ extended: true }));
 // Middleware para soportar otros métodos HTTP (DELETE, PUT) a través de _method
 app.use(methodOverride('_method'));
 
+//la ruta para el nageador 
+app.use('/', viewsRouter);
+
 // Handlebars
 app.engine(
     'handlebars',
@@ -30,6 +40,10 @@ app.engine(
         defaultLayout: 'main',
         layoutsDir: path.join(__dirname, 'views/layouts'),
         partialsDir: path.join(__dirname, 'views/partials'),
+        runtimeOptions: {
+            allowProtoPropertiesByDefault: true, // Permitir acceso a propiedades del prototipo
+            allowProtoMethodsByDefault: true,   // Permitir acceso a métodos del prototipo (opcional)
+        },
     })
 );
 app.set('view engine', 'handlebars');
@@ -93,3 +107,8 @@ io.on('connection', (socket) => {
 server.listen(port, () => {
     console.log(`Servidor corriendo en http://localhost:${port}`);
 });
+
+// Conectar a MongoDB Atlas
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log('Conexión a MongoDB Atlas exitosa'))
+    .catch(err => console.error('Error al conectar a MongoDB Atlas:', err.message));   

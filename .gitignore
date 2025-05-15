@@ -8,3 +8,6 @@ yarn-error.log*
 
 # Ignorar entornos de desarrollo
 .env
+
+##ignorar achivos txt
+instrucciones.txt

@@ -1,25 +1,71 @@
-Entrega N° 2
-Websockets
-Además, crear una vista “realTimeProducts.handlebars”, la cual vivirá en el endpoint “/realtimeproducts” en nuestro views router, ésta contendrá la misma lista de productos, sin embargo, ésta trabajará con websockets.
-Al trabajar con websockets, cada vez que creemos un producto nuevo, o bien cada vez que eliminemos un producto, se debe actualizar automáticamente en dicha vista la lista.
+Entrega Final Curso Desarrollo Backend Avanzado
+
+/Entrega Final Backend ------> Estructura del proyecto
+   /src
+       /data
+            carts.json                    # Archivo JSON con datos de carritos
+            products.json                 # Archivo JSON con datos de productos
+        /managers
+            CartManager.js                # Clase para gestionar carritos
+            ProductManager.js             # Clase para gestionar productos
+        /models 
+            Cart.js
+            Products.js
+       /public 
+            client.js
+            index.HTML
+            /css
+               styless.css                # Añadir estilos a la web
+       /routers
+            carts.router.js               # Rutas relacionadas con carritos
+            products.router.js            # Rutas relacionadas con productos
+            views.router.js               # Rutas relacionadas al producto mostrados en la Web
+       /views
+            products.handlebars           # pagina principal (donde se muestran los productos)
+            realtimeProducts.handlebars   # productos en tiempo real 
+            /layouts
+                main.handlebars           # estructura HTML base
+        /controllers
+            carts.controller              # Para usar populate
+    app.js                                # Configuración principal del servidor
+    utils.js                              # Funciones auxiliares (opcional)
+    .env
+.gitignore
+package.json 
+package-lock.json                          # Archivos de dependencias
 
 
-Consigna
+-----------------------------Pruebas con POSTMAN para Productos----------------------------------
 
-Configurar nuestro proyecto para que trabaje con Handlebars y websocket.
+Ver todos los productos directo de la Web --------> http://localhost:8080/products
 
-Aspectos a incluir
+Ejemplo 0: Sin parámetros <3
+URL POST: http://localhost:8080/api/products
+Resultado esperado: Agrega un producto a la base de datos 
 
-Configurar el servidor para integrar el motor de plantillas Handlebars e instalar un servidor de socket.io al mismo.
+          (Para las pruebas de POSTMAN los productos estan separados por paginas,
+                            cada pagina, tiene 10 productos)
 
-Crear una vista “home.handlebars” la cual contenga una lista de todos los productos agregados hasta el momento
+Ejemplo 1: Sin parámetros   <3
+URL GET: http://localhost:8080/api/products
+Resultado esperado: Muestra 10 productos de la base de datos (esta implementado ya que si tuviera 1000 productos tardaria en mostrarse todos)
 
-Sugerencias
+Ejemplo 2: Con query para categoría <3
+URL: http://localhost:8080/api/products?query=Electronics
+Resultado esperado: Muestra los primeros 10 productos que sean de la categoría electronics. 
+(si le pongo un limit=(cant productos de mi base de datos)), sirve para mostrar los productos de la categoria electronics de toda la BD.
 
-Ya que la conexión entre una consulta HTTP y websocket no está contemplada dentro de la clase. Se recomienda que, para la creación y eliminación de un producto, Se cree un formulario simple en la vista realTimeProducts.handlebars. Para que el contenido se envíe desde websockets y no HTTP. Sin embargo, esta no es la mejor solución, leer el siguiente punto.
+Ejemplo 3: Con sort ascendente    <3
+URL GET: http://localhost:8080/api/products?sort=asc
+Resultado esperado: Muestra los primeros 10 productos ordenados de menor a mayor precio
+               si pongo: http://localhost:8080/api/products?sort=asc&page=2
+               Resultado esperado: Los 10 productos de la 2da pagina de menor a mayor precio
 
-Si se desea hacer la conexión de socket emits con HTTP, deberás buscar la forma de utilizar el servidor io de Sockets dentro de la petición POST. ¿Cómo utilizarás un emit dentro del POST?
+Ejemplo 4: Con page      <3
+URL GET: http://localhost:8080/api/products?page=2
+Resultado esperado: Muestra los productos en la segunda página.
 
+------------------------------------------------------------------------------------------------
 
 estudiante: Sofía Micaela Cortez
                              
