@@ -1,48 +1,53 @@
 Entrega Final Curso Desarrollo Backend Avanzado
 
-(/Entrega Final Backend ------> Estructura del proyecto
-   /src
-        /controllers
-            carts.controller              # Para usar populate
-            products.controller           
-       /data
-            carts.json                    # Archivo JSON con datos de carritos
-            products.json                 # Archivo JSON con datos de productos
-        /managers
-            CartManager.js                # Clase para gestionar carritos
-            ProductManager.js             # Clase para gestionar productos
-        /models 
-            Cart.js
-            Products.js
-       /public 
-            client.js
-            index.HTML
-            /css
-               styless.css                # Añadir estilos a la web
-       /routers
-            carts.router.js               # Rutas relacionadas con carritos
-            products.router.js            # Rutas relacionadas con productos
-            views.router.js               # Rutas relacionadas al producto mostrados en la Web
-       /views
-            productDetail.handlebars      # pagina de detalles de los productos
-            products.handlebars           # pagina principal (donde se muestran los productos)
-            realtimeProducts.handlebars   # productos en tiempo real 
-            /layouts
-                main.handlebars           # estructura HTML base
-    app.js                                # Configuración principal del servidor
-    utils.js                              # Funciones auxiliares (opcional)
-    .env
-.gitignore
-package.json 
-package-lock.json                          # Archivos de dependencias  )
+   {
+    /Entrega Final Backend ------> Estructura del proyecto
+        /src
+            /controllers
+                carts.controller              
+                products.controller           
+            /data
+                carts.json                    # Archivos JSON
+                products.json                 
+            /managers
+                CartManager.js                # Clase para gestionar carritos
+                ProductManager.js             # Clase para gestionar productos
+            /middleware
+                ssesionCart.js                # Para permitir que cada cliente tenga su carrito 
+            /models 
+                Cart.js
+                Products.js
+            /public 
+                client.js
+                index.HTML
+                /css
+                   styless.css                # Añadir estilos a la web
+            /routers
+                carts.router.js               # Rutas relacionadas con carritos
+                products.router.js            # Rutas relacionadas con productos
+                views.router.js               # Rutas relacionadas a lo mostrado en la Web
+            /views
+                productDetail.handlebars      # pagina de detalles de los productos
+                products.handlebars           # pagina principal
+                cartView.handlebars           # pagina de carrito
+                checkout.handlebars           # pagina para que el cliente haga la compra
+                realtimeProducts.handlebars   # productos en tiempo real 
+                /layouts
+                    main.handlebars           # estructura HTML base
+        app.js                                # Configuración principal del servidor
+        utils.js                              # Funciones auxiliares (opcional)
+        .env    
+    .gitignore                                # Para ignorar node_modules y .env
+    package.json 
+    package-lock.json                         # Archivos de dependencias  
+   }
 
 -------------------------------------------------------------------------------------------------
 
          Web principal --------> http://localhost:8080/products
 
-     En la web por ahora se pueden ver los productos, si tocas uno te lleva a otra 
-        pagina que te muestra los detalles del producto, si tocas el boton de
-      agregar al carrito, se agrega al un carrito que tiene su id en el codigo
+    Aplicación e-commerce para poder vender productos,  En la pagina por ahora se pueden ver los productos, si el cliente toca un producto lo redirige a otra pagina que te muestra los detalles del producto, si el cliente toca el boton de agregar al carrito, se le crea un carrito unico en la base de datos , y lo redirige a la pagina donde se muestra su carrito,
+     si el cliente toca el boton de iniciar compra, se le redirige a la pagina donde pone sus datos y esos datos se envian al servidor, con los datos de los productos de su carrito.
 
 -----------------------------Pruebas con POSTMAN para Productos----------------------------------
 Ejemplo 0: Sin parámetros <3
@@ -57,7 +62,7 @@ URL GET: http://localhost:8080/api/products
 Resultado esperado: Muestra 10 productos de la base de datos (esta implementado ya que si tuviera 1000 productos tardaria en mostrarse todos)
 
 Ejemplo 2: Con query para categoría <3
-URL: http://localhost:8080/api/products?query=Electronics
+URL GET : http://localhost:8080/api/products?query=Electronics
 Resultado esperado: Muestra los primeros 10 productos que sean de la categoría electronics. 
 (si le pongo un limit=(cant productos de mi base de datos)), sirve para mostrar los productos de la categoria electronics de toda la BD.
 

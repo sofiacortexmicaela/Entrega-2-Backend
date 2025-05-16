@@ -11,6 +11,9 @@ import ProductManager from './managers/ProductManager.js';
 import methodOverride from 'method-override'; 
 import mongoose from "mongoose";
 import dotenv from 'dotenv';
+import session from 'express-session';
+
+
 dotenv.config();
 
 // Verificar si MONGO_URI se está cargando correctamente
@@ -21,6 +24,13 @@ const app = express();
 const port = 8080;
 const server = http.createServer(app);
 const io = new Server(server);
+
+//logica de inicio sesion 
+app.use(session({
+  secret: 'programacionBackend',
+  resave: false,
+  saveUninitialized: true
+}));
 
 // Middleware para parsear JSON y datos de formulario
 app.use(express.json());

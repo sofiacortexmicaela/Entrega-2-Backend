@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+</head>
+<body>
+    <h1>{{title}}</h1>
+
+    <form action="/procesarCompra" method="POST">
+        <input type="hidden" name="cartId" value="{{cartId}}" />
+
+        <label for="nombre">Nombre completo:</label><br>
+        <input type="text" name="nombre" id="nombre" required><br><br>
+
+        <label for="email">Correo electrónico:</label><br>
+        <input type="email" name="email" id="email" required><br><br>
+
+        <label for="direccion">Dirección de envío:</label><br>
+        <textarea name="direccion" id="direccion" required></textarea><br><br>
+
+        <button type="submit">Finalizar compra</button>
+    </form>
+
+    <p style="margin-top: 20px; color: green;">
+        * Estaremos enviándole un correo con los detalles de su compra.
+    </p>
+
+    <br>
+    <a href="/carts/{{cartId}}">
+        <button>Volver al carrito</button>
+    </a>
+</body>
+</html>
