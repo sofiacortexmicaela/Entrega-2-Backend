@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>{{product.title}}</h1>
+    </header>
+    <main class="product-detail">
+        {{#if product.imageUrl}}
+            <img src="{{product.imageUrl}}" alt="{{product.title}}" class="product-image">
+        {{/if}}
+
+        <p><strong>Descripción:</strong> {{product.description}}</p>
+        <p><strong>Precio:</strong> ${{product.price}}</p>
+        <p><strong>Categoría:</strong> {{product.category}}</p>
+        <p><strong>Stock:</strong> {{product.stock}}</p>
+        <p><strong>Disponibilidad:</strong> 
+            {{#if product.available}}
+                Disponible
+            {{else}}
+                No disponible
+            {{/if}}
+        </p>
+
+        <a href="/products">← Volver a productos</a>
+    </main>
+</body>
+</html>

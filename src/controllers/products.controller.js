@@ -28,20 +28,7 @@ export const getProductsWithPagination = async (req, res) => {
   }
 };
 
-/* Obtener los detalles de un producto por ID
-export const getProductDetails = async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.pid);
-    if (!product) {
-      return res.status(404).send('Producto no encontrado');
-    }
-    res.render('productDetails', { product, cartId: 'yourCartId' }); // Reemplazar con el ID del carrito actual
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Error al obtener los detalles del producto.');
-  }
-};*/
-//-------------RUTAS PARA AGREGAR/ELIMINAR PRODUCTOS DESDE LA WEB----------------//
+//--------------------------------------------------------------------------------//
 // Agregar un nuevo producto a la base de datos
 export const addProduct = async (req, res) => {
   try {

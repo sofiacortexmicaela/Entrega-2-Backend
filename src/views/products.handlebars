@@ -14,12 +14,22 @@
     <main>
         <div class="product-list">
             {{#each products}}
-            <div class="product-card">
-                <h2>{{this.title}}</h2>
-                <p>Descripción: {{this.description}}</p>
-                <p class="price">Precio: ${{this.price}}</p>
-                <p>Categoría: {{this.category}}</p>
-            </div>
+            <a href="/products/{{this._id}}" class="product-card-link">
+               <div class="product-card">
+                   <h2>{{this.title}}</h2>
+                   <p>Descripción: {{this.description}}</p>
+                   <p class="price">Precio: ${{this.price}}</p>
+                   <p>Categoría: {{this.category}}</p>
+
+                   <!-- Formulario para agregar al carrito -->
+            <form action="/api/carts/{{../cartId}}/products/{{this._id}}" method="POST">
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit">Agregar al carrito</button>
+            </form>
+
+               </div>
+            </a>
+            
             {{/each}}
         </div>
     </main>

@@ -2,6 +2,9 @@ Entrega Final Curso Desarrollo Backend Avanzado
 
 (/Entrega Final Backend ------> Estructura del proyecto
    /src
+        /controllers
+            carts.controller              # Para usar populate
+            products.controller           
        /data
             carts.json                    # Archivo JSON con datos de carritos
             products.json                 # Archivo JSON con datos de productos
@@ -21,12 +24,11 @@ Entrega Final Curso Desarrollo Backend Avanzado
             products.router.js            # Rutas relacionadas con productos
             views.router.js               # Rutas relacionadas al producto mostrados en la Web
        /views
+            productDetail.handlebars      # pagina de detalles de los productos
             products.handlebars           # pagina principal (donde se muestran los productos)
             realtimeProducts.handlebars   # productos en tiempo real 
             /layouts
                 main.handlebars           # estructura HTML base
-        /controllers
-            carts.controller              # Para usar populate
     app.js                                # Configuración principal del servidor
     utils.js                              # Funciones auxiliares (opcional)
     .env
@@ -34,11 +36,15 @@ Entrega Final Curso Desarrollo Backend Avanzado
 package.json 
 package-lock.json                          # Archivos de dependencias  )
 
+-------------------------------------------------------------------------------------------------
+
+         Web principal --------> http://localhost:8080/products
+
+     En la web por ahora se pueden ver los productos, si tocas uno te lleva a otra 
+        pagina que te muestra los detalles del producto, si tocas el boton de
+      agregar al carrito, se agrega al un carrito que tiene su id en el codigo
 
 -----------------------------Pruebas con POSTMAN para Productos----------------------------------
-
-Ver todos los productos directo de la Web --------> http://localhost:8080/products
-
 Ejemplo 0: Sin parámetros <3
 URL POST: http://localhost:8080/api/products
 Resultado esperado: Agrega un producto a la base de datos 
