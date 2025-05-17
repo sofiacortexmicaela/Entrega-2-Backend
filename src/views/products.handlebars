@@ -24,8 +24,9 @@
                     </div>
                 </a>
 
-                <!-- Formulario para agregar al carrito dinámico -->
+                <!-- Formulario para que el cliente pueda crear su carrito unico desde la web -->
                 <form action="/add-to-cart/{{this._id}}" method="POST">
+                     <input type="hidden" name="cartId" value="{{../cartId}}">
                     <button type="submit">Agregar al carrito</button>
                 </form>
             </div>

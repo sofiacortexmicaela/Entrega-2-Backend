@@ -1,4 +1,5 @@
 import express from 'express';
+import mongoose from 'mongoose';
 import Cart from '../models/Cart.js';
 import Product from '../models/Product.js'; 
 
@@ -12,7 +13,8 @@ router.get('/products', async (req, res) => {
     try {
         const products = await Product.find();
 
-        const cartId = '6823fdd3887121ec049d71f2'; // <-- ObjectId válido de tu base de datos
+        // toma el cartId de la sesión (puede ser null si todavía no se creó)
+        const cartId = req.session.cartId;
 
         res.render('products', {
             products,
@@ -44,80 +46,54 @@ router.get('/products/:id', async (req, res) => {
     }
 });
 
-/*----------------------------------------------------//
+//------------------------CREAR CARRITO DESDE LA WEB--------------//
 router.post('/add-to-cart/:pid', async (req, res) => {
     try {
         const productId = req.params.pid;
+        const objectProductId = new mongoose.Types.ObjectId(productId);
 
-        let cartId = req.session.cartId;
+        let cartId = req.body.cartId || req.session.cartId;
+        console.log('Cart ID recibido:', cartId);
+
         let cart;
 
-        // Si no hay carrito, crear uno nuevo
+        // crear nuevo carrito si no existe
         if (!cartId) {
             const newCart = new Cart({ products: [] });
-            const savedCart = await newCart.save();
-            cartId = savedCart._id.toString();
+            cart = await newCart.save();
+            cartId = cart._id.toString();
             req.session.cartId = cartId;
-            cart = savedCart;
-        } else {
-            cart = await Cart.findById(cartId);
-        }
-
-        // ver si el producto ya está en el carrito
-        const existing = cart.products.find(p => p.product.toString() === productId);
-        if (existing) {
-            existing.quantity += 1;
-        } else {
-            cart.products.push({ product: productId, quantity: 1 });
-        }
-
-        await cart.save();
-
-        res.redirect(`/carts/${cart._id}`);
-    } catch (error) {
-        console.error('Error al agregar producto desde vista:', error);
-        res.status(500).send('Error al agregar producto al carrito');
-    }
-});*/
-router.post('/add-to-cart/:pid', async (req, res) => {
-    try {
-        const productId = req.params.pid;
-
-        let cartId = req.session.cartId;
-        let cart;
-
-        // Si no hay carrito en la sesión, creamos uno nuevo
-        if (!cartId) {
-            const newCart = new Cart({ products: [] });
-            const savedCart = await newCart.save();
-            cartId = savedCart._id.toString();
-            req.session.cartId = cartId;
-            cart = savedCart;
+            console.log(' Carrito nuevo creado <3 ', cartId);
         } else {
             cart = await Cart.findById(cartId);
             if (!cart) {
-                // Si el carrito guardado ya no existe (ej: fue eliminado), crear uno nuevo
                 const newCart = new Cart({ products: [] });
-                const savedCart = await newCart.save();
-                cartId = savedCart._id.toString();
+                cart = await newCart.save();
+                cartId = cart._id.toString();
                 req.session.cartId = cartId;
-                cart = savedCart;
+                console.log(' Carrito no encontrado, se creó uno nuevo:', cartId);
+            } else {
+                console.log(' Carrito existente encontrado:', cartId);
             }
         }
 
-        // Buscar si el producto ya existe en el carrito
-        const existingProduct = cart.products.find(item => item.product.toString() === productId);
-        if (existingProduct) {
-            existingProduct.quantity += 1;
+        // verifica si el producto ya está
+        const existingProductIndex = cart.products.findIndex(p => p.product.toString() === productId);
+
+        if (existingProductIndex !== -1) {
+            cart.products[existingProductIndex].quantity += 1;
         } else {
-            cart.products.push({ product: productId, quantity: 1 });
+            cart.products.push({ product: objectProductId, quantity: 1 });
         }
 
         await cart.save();
 
+        console.log(' Producto agregado correctamente al carrito  <3 ', productId);
+        console.log(' Estado actual del carrito:', cart.products);
+
         res.redirect(`/carts/${cartId}`);
     } catch (error) {
-        console.error('Error al agregar producto desde vista:', error);
+        console.error(' xxx Error al agregar producto al carrito:', error);
         res.status(500).send('Error al agregar producto al carrito');
     }
 });
@@ -164,7 +140,7 @@ router.post('/procesarCompra', async (req, res) => {
             return res.status(404).send('Carrito no encontrado');
         }
 
-        // Simular procesamiento (acá podrías enviar un correo real)
+        // Simular procesamiento
         console.log(`Compra realizada por ${nombre} ${email}>`);
         console.log(`Enviando a: ${direccion}`);
         console.log(`Productos:`, cart.products.map(p => ({
@@ -179,7 +155,7 @@ router.post('/procesarCompra', async (req, res) => {
         // Eliminar el carrito de la sesión
         req.session.cartId = null;
 
-        // Redirigir a productos con un mensaje flash si querés
+        // Redirige al cliente a la web principal
         res.redirect('/products');
     } catch (error) {
         console.error('Error al procesar la compra:', error);

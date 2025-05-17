@@ -1,6 +1,6 @@
 Entrega Final Curso Desarrollo Backend Avanzado
 
-   {
+   (
     /Entrega Final Backend ------> Estructura del proyecto
         /src
             /controllers
@@ -25,12 +25,12 @@ Entrega Final Curso Desarrollo Backend Avanzado
             /routers
                 carts.router.js               # Rutas relacionadas con carritos
                 products.router.js            # Rutas relacionadas con productos
-                views.router.js               # Rutas relacionadas a lo mostrado en la Web
+                views.router.js               # Rutas relacionadas a lo mostrado en la Web de la vista /products
             /views
                 productDetail.handlebars      # pagina de detalles de los productos
                 products.handlebars           # pagina principal
                 cartView.handlebars           # pagina de carrito
-                checkout.handlebars           # pagina para que el cliente haga la compra
+                checkout.handlebars           # pagina para que el cliente compre y se guarde en la bd
                 realtimeProducts.handlebars   # productos en tiempo real 
                 /layouts
                     main.handlebars           # estructura HTML base
@@ -40,7 +40,7 @@ Entrega Final Curso Desarrollo Backend Avanzado
     .gitignore                                # Para ignorar node_modules y .env
     package.json 
     package-lock.json                         # Archivos de dependencias  
-   }
+   )
 
 -------------------------------------------------------------------------------------------------
 
