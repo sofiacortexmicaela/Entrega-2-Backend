@@ -1,6 +1,6 @@
 Entrega Final Curso Desarrollo Backend Avanzado
 
-   (
+   
     /Entrega Final Backend ------> Estructura del proyecto
         /src
             /controllers
@@ -30,7 +30,7 @@ Entrega Final Curso Desarrollo Backend Avanzado
                 productDetail.handlebars      # pagina de detalles de los productos
                 products.handlebars           # pagina principal
                 cartView.handlebars           # pagina de carrito
-                checkout.handlebars           # pagina para que el cliente compre y se guarde en la bd
+                checkout.handlebars           # para que el cliente compre y se guarde en la bd
                 realtimeProducts.handlebars   # productos en tiempo real 
                 /layouts
                     main.handlebars           # estructura HTML base
@@ -40,14 +40,22 @@ Entrega Final Curso Desarrollo Backend Avanzado
     .gitignore                                # Para ignorar node_modules y .env
     package.json 
     package-lock.json                         # Archivos de dependencias  
-   )
+   
 
--------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------
+(para probar este proyecto se descarga sin el .env ya que esta oculto para seguridad de la base de datos, por lo cual, deberias, crear un proyecto en la Base de Datos de mongoDB Atlas (ya que se usa en este proyecto) y solo poner el link en un archivo .env)
 
-         Web principal --------> http://localhost:8080/products
+REPO del seguimiento de este proyecto: https://github.com/sofiacortexmicaela/Project-Web-.git   --> con mas funcionalidades y estilos
 
-    Aplicación e-commerce para poder vender productos,  En la pagina por ahora se pueden ver los productos, si el cliente toca un producto lo redirige a otra pagina que te muestra los detalles del producto, si el cliente toca el boton de agregar al carrito, se le crea un carrito unico en la base de datos , y lo redirige a la pagina donde se muestra su carrito,
-     si el cliente toca el boton de iniciar compra, se le redirige a la pagina donde pone sus datos y esos datos se envian al servidor, con los datos de los productos de su carrito.
+------------------------------------------------------------------------------------------------------------------
+
+Pruebas para Entrega Final Curso Desarrollo Backend Avanzado:
+
+                   Web principal (en navegador) --------> http://localhost:8080/products
+
+
+    Muestra la web principal de un negocio Web e-commerce para poder vender productos,  En la pagina por ahora se pueden ver los productos, si el cliente toca un producto lo redirige a otra pagina que te muestra los detalles del producto, si el cliente toca el boton de agregar al carrito, se le crea un carrito unico en la base de datos , y lo redirige a la pagina donde se muestra su carrito,
+     si el cliente toca el boton de iniciar compra, se le redirige a la pagina donde pone sus datos y esos datos se envian al servidor y se muestran por consola, con los datos de los productos de su carrito.
 
 -----------------------------Pruebas con POSTMAN para Productos----------------------------------
 Ejemplo 0: Sin parámetros <3
